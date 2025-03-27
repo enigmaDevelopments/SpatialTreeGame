@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playerControler : MonoBehaviour
 {
     public Transform blaster;
     public GameObject bullet;
+    public QuadTree tree;
     public float speed = 0.1f;
 
     // Update is called once per frame
@@ -24,5 +26,7 @@ public class playerControler : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
         transform.up = dir;
+        if (tree.PointInRadius(transform,.8f) || 64 < Mathf.Abs(transform.position.x) || 64 < Mathf.Abs(transform.position.y))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
