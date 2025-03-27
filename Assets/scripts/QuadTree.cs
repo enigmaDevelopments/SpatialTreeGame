@@ -25,23 +25,29 @@ public class QuadTree : MonoBehaviour
     }
     private void merge(Transform toMerge)
     {
-        int neice = 0;
+        int grandchildCount = 0;
         foreach (Transform child in toMerge)
         {
-            neice += child.childCount;
-            if (2 < neice)
+            grandchildCount += child.childCount;
+            if (2 < grandchildCount)
                 return;
         }
         List<Transform> grandchilden = new List<Transform>();
+        List<Transform> childeren = new List<Transform>();
         foreach (Transform child in toMerge)
-        { 
+        {
             foreach (Transform grandchild in child)
                 grandchilden.Add(grandchild);
-            child.DetachChildren();
-            Destroy(child.gameObject);
+            childeren.Add(child);
         }
+        Debug.Assert(toMerge.childCount == 4);
         foreach (Transform grandchild in grandchilden)
             grandchild.SetParent(toMerge);
+        foreach (Transform child in childeren)
+        {
+            child.SetParent(null);
+            Destroy(child.gameObject,.001f);
+        }
         merge(toMerge.parent);
     }
     public Transform GetLocation(Transform find)
