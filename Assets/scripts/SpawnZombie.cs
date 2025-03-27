@@ -5,8 +5,9 @@ public class SpawnZombie : MonoBehaviour
 {
     public GameObject zombie;
     public Transform player;
+    public QuadTree tree;
     public float spawnRate = .01f;
-    void Update()
+    void FixedUpdate()
     {
         if (Random.value < spawnRate)
         {
@@ -17,6 +18,7 @@ public class SpawnZombie : MonoBehaviour
             } while (Vector3.Distance(pos, player.position) < 3);
             GameObject zombieInstance = Instantiate(zombie, pos, Quaternion.identity);
             zombieInstance.GetComponent<FollowPlayer>().target = player;
+            tree.Insert(zombieInstance.transform);
         }
     }
 }

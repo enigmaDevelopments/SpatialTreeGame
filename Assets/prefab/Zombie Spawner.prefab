@@ -46,4 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zombie: {fileID: 2424527543523879883, guid: c8e17992eb10a3d43a7da0c2b09cb9e1, type: 3}
   player: {fileID: 0}
-  spawnRate: 0.01
+  tree: {fileID: 0}
+  spawnRate: 0.1
