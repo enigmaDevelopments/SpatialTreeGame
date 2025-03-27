@@ -10,6 +10,40 @@ public class QuadTree : MonoBehaviour
         if (treeLocation.childCount == 3)
             Split(treeLocation);
     }
+    public void Move(Transform zombie)
+    {
+        if (Mathf.Abs(zombie.localPosition.x) <= .5f && Mathf.Abs(zombie.localPosition.y) <= .5f)
+            return;
+        Debug.Log("Move");
+        Remove(zombie);
+        Insert(zombie);
+    }
+    public void Remove(Transform zombie)
+    {
+        Transform grandparent = zombie.parent.parent;
+        zombie.SetParent(null);
+        int cousens = 0;
+        foreach (Transform child in grandparent)
+        {
+            cousens += child.childCount;
+            if (2 < cousens)
+                return;
+        }
+        merge(grandparent);
+    }
+    private void merge(Transform toMerge)
+    {
+        List<Transform> grandchilden = new List<Transform>();
+        foreach (Transform child in toMerge)
+        { 
+            foreach (Transform grandchild in child)
+                grandchilden.Add(grandchild);
+            child.DetachChildren();
+            Destroy(child.gameObject);
+        }
+        foreach (Transform grandchild in grandchilden)
+            grandchild.SetParent(toMerge);
+    }
     public Transform GetLocation(Transform find)
     {
         return GetLocation(find, transform);

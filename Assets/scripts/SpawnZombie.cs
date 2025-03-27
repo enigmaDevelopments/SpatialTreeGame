@@ -1,4 +1,3 @@
-using TreeEditor;
 using UnityEngine;
 
 public class SpawnZombie : MonoBehaviour
@@ -18,6 +17,7 @@ public class SpawnZombie : MonoBehaviour
             } while (Vector3.Distance(pos, player.position) < 3);
             GameObject zombieInstance = Instantiate(zombie, pos, Quaternion.identity);
             zombieInstance.GetComponent<FollowPlayer>().target = player;
+            zombieInstance.GetComponent<TreeInterface>().tree = tree;
             tree.Insert(zombieInstance.transform);
         }
     }
