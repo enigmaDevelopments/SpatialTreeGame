@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class QuadTree : MonoBehaviour
 {
@@ -22,6 +23,46 @@ public class QuadTree : MonoBehaviour
         Transform grandparent = zombie.parent.parent;
         zombie.SetParent(null);
         merge(grandparent);
+    }
+    public bool PointInRadius(Transform check, float radius)
+    {
+        return PointInRadius(transform, check, radius);
+    }
+    private bool PointInRadius(Transform current, Transform check, float radius)
+    {
+        if (!Intersects(current, check, radius))
+            return false;
+        if (current.childCount == 4)
+        {
+            foreach (Transform child in current)
+                if (PointInRadius(child, check, radius))
+                    return true;
+            return false;
+        }
+        foreach (Transform child in current)
+            if (Vector2.Distance(child.position,check.position) <= radius)
+                return true;
+        return false;
+    }
+    public Transform GetLocation(Transform find)
+    {
+        return GetLocation(find, transform);
+    }
+    private Transform GetLocation(Transform find,Transform current)
+    {
+        if (current.childCount != 4)
+            return current;
+        int position = 0;
+        if (current.position.x < find.position.x)
+            position += 1;
+        if (current.position.y < find.position.y)
+            position += 2;
+        return GetLocation(find, current.GetChild(position));
+    }
+    private bool Intersects(Transform node,Transform check, float radius)
+    {
+        float size = (node.lossyScale.x + radius)/2;
+        return Mathf.Abs(check.position.x - node.position.x) <= size && Mathf.Abs(check.position.y - node.position.y) <= size;
     }
     private void merge(Transform toMerge)
     {
@@ -51,21 +92,6 @@ public class QuadTree : MonoBehaviour
             Destroy(child.gameObject,.001f);
         }
         merge(toMerge.parent);
-    }
-    public Transform GetLocation(Transform find)
-    {
-        return GetLocation(find, transform);
-    }
-    private Transform GetLocation(Transform find,Transform current)
-    {
-        if (current.childCount != 4)
-            return current;
-        int position = 0;
-        if (current.position.x < find.position.x)
-            position += 1;
-        if (current.position.y < find.position.y)
-            position += 2;
-        return GetLocation(find, current.GetChild(position));
     }
     private void Split(Transform current)
     {

@@ -19,7 +19,7 @@ public class playerControler : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
             transform.position += new Vector3(move, 0, 0);
         if (Input.GetMouseButtonDown(0))
-            _ = Instantiate(bullet, blaster.position, transform.rotation);
+            Instantiate(bullet, blaster.position, transform.rotation);
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
