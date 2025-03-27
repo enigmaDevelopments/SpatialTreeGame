@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class QuadTree : MonoBehaviour
 {
+    public float size = 128;
+    private float maxRadius;
+    private void Start()
+    {
+        transform.localScale = new Vector3(size, size, 1);
+        maxRadius = size / 2 * Mathf.Sqrt(2);
+    }
     public void Insert(Transform zombie)
     {
         Transform treeLocation = GetLocation(zombie);
@@ -22,6 +29,37 @@ public class QuadTree : MonoBehaviour
         Transform grandparent = zombie.parent.parent;
         zombie.SetParent(null);
         merge(grandparent);
+    }
+    public GameObject NearestNeighbor(Transform find)
+    {
+        return NearestNeighbor(find, maxRadius);
+    }
+    public GameObject NearestNeighbor(Transform find, float min)
+    {
+        GameObject output = null;
+        NearestNeighbor(transform, find, ref output, min);
+        return output;
+    }
+    private float NearestNeighbor(Transform current, Transform find, ref GameObject output, float min)
+    {
+        if (!Intersects(current, find, min))
+            return min;
+        if (current.childCount == 4)
+        {
+            foreach (Transform child in current)
+                min = NearestNeighbor(child, find, ref output, min);
+            return min;
+        }
+        foreach (Transform child in current)
+        {
+            float distance = Vector2.Distance(child.position, find.position);
+            if (distance <= min)
+            {
+                min = distance;
+                output = child.gameObject;
+            }
+        }
+        return min;
     }
     public bool PointInRadius(Transform check, float radius)
     {
