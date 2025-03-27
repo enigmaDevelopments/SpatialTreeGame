@@ -28,6 +28,8 @@ public class QuadTree : MonoBehaviour
         int grandchildCount = 0;
         foreach (Transform child in toMerge)
         {
+            if (child.childCount == 4)
+                merge(child);
             grandchildCount += child.childCount;
             if (2 < grandchildCount)
                 return;

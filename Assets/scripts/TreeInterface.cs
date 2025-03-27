@@ -7,8 +7,4 @@ public class TreeInterface : MonoBehaviour
     {
         tree.Move(transform);
     }
-    void OnDestroy()
-    {
-        Debug.LogException(new System.Exception("ouchie :3"));
-    }
 }
