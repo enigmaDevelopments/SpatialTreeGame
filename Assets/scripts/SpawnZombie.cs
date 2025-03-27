@@ -13,7 +13,7 @@ public class SpawnZombie : MonoBehaviour
             Vector3 pos;
             do
             {
-               pos = new Vector3(Random.Range(-64, 64), Random.Range(-64, 64), -.4f);
+               pos = new Vector3(Random.Range(-tree.size, tree.size), Random.Range(-tree.size, tree.size), -.4f);
             } while (Vector3.Distance(pos, player.position) < 3);
             GameObject zombieInstance = Instantiate(zombie, pos, Quaternion.identity);
             zombieInstance.GetComponent<FollowPlayer>().target = player;

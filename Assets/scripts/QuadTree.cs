@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class QuadTree : MonoBehaviour
 {
-    public float size = 128;
+    public float size = 64;
     private float maxRadius;
     private void Start()
     {
-        transform.localScale = new Vector3(size, size, 1);
-        maxRadius = size / 2 * Mathf.Sqrt(2);
+        transform.localScale = new Vector3(size*2, size*2, 1);
+        maxRadius = size * Mathf.Sqrt(2);
     }
     public void Insert(Transform zombie)
     {

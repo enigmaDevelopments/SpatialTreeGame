@@ -26,7 +26,7 @@ public class playerControler : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
         transform.up = dir;
-        if (tree.PointInRadius(transform,.8f) || 64 < Mathf.Abs(transform.position.x) || 64 < Mathf.Abs(transform.position.y))
+        if (tree.PointInRadius(transform,.8f) || tree.size < Mathf.Abs(transform.position.x) || tree.size < Mathf.Abs(transform.position.y))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

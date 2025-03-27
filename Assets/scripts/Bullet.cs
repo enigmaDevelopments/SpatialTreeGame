@@ -11,11 +11,11 @@ public class Bullet : MonoBehaviour
     }
     void Update()
     {
-        if (64 < Mathf.Abs(transform.position.x) || 64 < Mathf.Abs(transform.position.y))
+        if (tree.size < Mathf.Abs(transform.position.x) || tree.size < Mathf.Abs(transform.position.y))
             Destroy(gameObject);
-        if (tree.PointInRadius(transform, 1))
+        GameObject zombie = tree.NearestNeighbor(transform, 1);
+        if (zombie != null)
         {
-            GameObject zombie = tree.NearestNeighbor(transform,1);
             tree.Remove(zombie.transform);
             Destroy(zombie);
             Destroy(gameObject);
