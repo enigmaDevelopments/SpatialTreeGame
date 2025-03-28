@@ -6,7 +6,7 @@ public class QuadTreeInit : MonoBehaviour
     void Start()
     {
         transform.localScale = new Vector3(size * 2, size * 2, 1);
-        QuadTree.transform = transform;
+        QuadTree.root = transform;
         QuadTree.size = size;
     }
 }

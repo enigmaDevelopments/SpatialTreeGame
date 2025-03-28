@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class QuadTree
 {
-    public static Transform transform;
+    public static Transform root;
     public static float size = 64;
     public static void Insert(Transform zombie)
     {
@@ -32,18 +32,18 @@ public static class QuadTree
     public static GameObject NearestNeighbor(Transform find, float min)
     {
         GameObject output = null;
-        NearestNeighbor(transform, find, ref output, min);
+        NearestNeighbor(root, find, ref output, ref min);
         return output;
     }
-    private static float NearestNeighbor(Transform current, Transform find, ref GameObject output, float min)
+    private static void NearestNeighbor(Transform current, Transform find, ref GameObject output, ref float min)
     {
         if (!Intersects(current, find, min))
-            return min;
+            return;
         if (current.childCount == 4)
         {
             foreach (Transform child in current)
-                min = NearestNeighbor(child, find, ref output, min);
-            return min;
+                NearestNeighbor(child, find, ref output, ref min);
+            return;
         }
         foreach (Transform child in current)
         {
@@ -54,11 +54,11 @@ public static class QuadTree
                 output = child.gameObject;
             }
         }
-        return min;
+        return;
     }
     public static bool PointInRadius(Transform check, float radius)
     {
-        return PointInRadius(transform, check, radius);
+        return PointInRadius(root, check, radius);
     }
     private static bool PointInRadius(Transform current, Transform check, float radius)
     {
@@ -78,7 +78,7 @@ public static class QuadTree
     }
     public static Transform GetLocation(Transform find)
     {
-        return GetLocation(find, transform);
+        return GetLocation(find, root);
     }
     private static Transform GetLocation(Transform find,Transform current)
     {
