@@ -4,8 +4,7 @@ public class SpawnZombie : MonoBehaviour
 {
     public GameObject zombie;
     public Transform player;
-    public Transform camera;
-    public QuadTree tree;
+    public Transform Camera;
     public float spawnRate = .01f;
     public float playerDistance = 3;
     void FixedUpdate()
@@ -22,12 +21,11 @@ public class SpawnZombie : MonoBehaviour
             Vector3 pos;
             do
             {
-                pos = new Vector3(Random.Range(-tree.size, tree.size), Random.Range(-tree.size, tree.size), -.4f);
-            } while (Vector3.Distance(pos, camera.position) < playerDistance);
+                pos = new Vector3(Random.Range(-QuadTree.size, QuadTree.size), Random.Range(-QuadTree.size, QuadTree.size), -.4f);
+            } while (Vector3.Distance(pos, Camera.position) < playerDistance);
             GameObject zombieInstance = Instantiate(zombie, pos, Quaternion.identity);
             zombieInstance.GetComponent<FollowPlayer>().target = player;
-            zombieInstance.GetComponent<TreeInterface>().tree = tree;
-            tree.Insert(zombieInstance.transform);
+            QuadTree.Insert(zombieInstance.transform);
         }
     }
 }

@@ -1,46 +1,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadTree : MonoBehaviour
+public static class QuadTree
 {
-    public float size = 64;
-    private float maxRadius;
-    private void Start()
-    {
-        transform.localScale = new Vector3(size*2, size*2, 1);
-        maxRadius = size * Mathf.Sqrt(2);
-    }
-    public void Insert(Transform zombie)
+    public static Transform transform;
+    public static float size = 64;
+    public static void Insert(Transform zombie)
     {
         Transform treeLocation = GetLocation(zombie);
         zombie.SetParent(treeLocation);
 
             Split(treeLocation);
     }
-    public void Move(Transform zombie)
+    public static void Move(Transform zombie)
     {
         if (Mathf.Abs(zombie.localPosition.x) <= .5f && Mathf.Abs(zombie.localPosition.y) <= .5f)
             return;
         Remove(zombie);
         Insert(zombie);
     }
-    public void Remove(Transform zombie)
+    public static void Remove(Transform zombie)
     {
         Transform grandparent = zombie.parent.parent;
         zombie.SetParent(null);
         merge(grandparent);
     }
-    public GameObject NearestNeighbor(Transform find)
+    public static GameObject NearestNeighbor(Transform find)
     {
-        return NearestNeighbor(find, maxRadius);
+        return NearestNeighbor(find, size * Mathf.Sqrt(2));
     }
-    public GameObject NearestNeighbor(Transform find, float min)
+    public static GameObject NearestNeighbor(Transform find, float min)
     {
         GameObject output = null;
         NearestNeighbor(transform, find, ref output, min);
         return output;
     }
-    private float NearestNeighbor(Transform current, Transform find, ref GameObject output, float min)
+    private static float NearestNeighbor(Transform current, Transform find, ref GameObject output, float min)
     {
         if (!Intersects(current, find, min))
             return min;
@@ -61,11 +56,11 @@ public class QuadTree : MonoBehaviour
         }
         return min;
     }
-    public bool PointInRadius(Transform check, float radius)
+    public static bool PointInRadius(Transform check, float radius)
     {
         return PointInRadius(transform, check, radius);
     }
-    private bool PointInRadius(Transform current, Transform check, float radius)
+    private static bool PointInRadius(Transform current, Transform check, float radius)
     {
         if (!Intersects(current, check, radius))
             return false;
@@ -81,11 +76,11 @@ public class QuadTree : MonoBehaviour
                 return true;
         return false;
     }
-    public Transform GetLocation(Transform find)
+    public static Transform GetLocation(Transform find)
     {
         return GetLocation(find, transform);
     }
-    private Transform GetLocation(Transform find,Transform current)
+    private static Transform GetLocation(Transform find,Transform current)
     {
         if (current.childCount != 4)
             return current;
@@ -96,12 +91,12 @@ public class QuadTree : MonoBehaviour
             position += 2;
         return GetLocation(find, current.GetChild(position));
     }
-    private bool Intersects(Transform node,Transform check, float radius)
+    private static bool Intersects(Transform node,Transform check, float radius)
     {
         float size = (node.lossyScale.x + radius)/2;
         return Mathf.Abs(check.position.x - node.position.x) <= size && Mathf.Abs(check.position.y - node.position.y) <= size;
     }
-    private void merge(Transform toMerge)
+    private static void merge(Transform toMerge)
     {
         int grandchildCount = 0;
         foreach (Transform child in toMerge)
@@ -126,11 +121,11 @@ public class QuadTree : MonoBehaviour
         foreach (Transform child in childeren)
         {
             child.SetParent(null);
-            Destroy(child.gameObject,.001f);
+            MonoBehaviour.Destroy(child.gameObject,.001f);
         }
         merge(toMerge.parent);
     }
-    private void Split(Transform current)
+    private static void Split(Transform current)
     {
         if (current.childCount != 3)
             return;
