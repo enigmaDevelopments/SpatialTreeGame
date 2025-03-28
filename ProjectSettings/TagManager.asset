@@ -4,43 +4,209 @@
 TagManager:
   serializedVersion: 3
   tags:
+  # Existing
   - zombie
+  # Player & Characters
+  - Player
+  - PlayerModel
+  - Ally
+  # Enemies
+  - Enemy
+  - EnemyMelee
+  - EnemyRanged
+  - EnemyFlying
+  - Boss
+  # NPCs
+  - NPC
+  - QuestGiver
+  - Merchant
+  # Items & Pickups
+  - Pickup
+  - WeaponPickup
+  - ArmorPickup
+  - ConsumablePickup
+  - KeyItem
+  - Currency
+  - InventoryItem # Generic tag for items once in inventory?
+  # Interactables
+  - Interactable
+  - Door
+  - Lever
+  - Button
+  - Chest
+  - LootContainer
+  - SavePoint
+  - Teleporter
+  - DialogueTrigger
+  # Environment
+  - Climbable
+  - Destructible
+  - Hazard
+  - WaterSurface # Could differ from Water Layer
+  - WaterDeep
+  - TriggerVolume
+  - SpawnPoint
+  - Waypoint
+  - CoverPoint
+  - MovingPlatform
+  # Gameplay Mechanics
+  - Projectile
+  - PlayerProjectile
+  - EnemyProjectile
+  - Explosion
+  - DamageZone
+  - HealZone
+  - EffectVolume # For applying buffs/debuffs
+  - TargetPoint # For AI targeting
+  # UI Related
+  - MinimapIcon
+  - WorldSpaceUI
+  # System / Managers
+  - GameController
+  - AudioManager
+  - SceneLoader
+  - PoolableObject # For object pooling systems
+  - EditorOnly # Objects to be ignored in builds
   layers:
-  - Default
-  - TransparentFX
-  - Ignore Raycast
-  - 
-  - Water
-  - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  # Built-in Defaults
+  - Default # 0
+  - TransparentFX # 1
+  - Ignore Raycast # 2
+  # Custom Starts Here
+  - Player # 3 - For player character physics/collision
+  - Water # 4 - Built-in
+  - UI # 5 - Built-in
+  - Ground # 6 - Terrain, floors, static surfaces players/enemies walk on
+  - Obstacle # 7 - Walls, large rocks, static colliders that block movement/LOS
+  - Enemy # 8 - For enemy character physics/collision
+  - Ragdoll # 9 - For physics-based ragdolls, distinct collision rules
+  - PlayerProjectile # 10 - Projectiles fired by the player
+  - EnemyProjectile # 11 - Projectiles fired by enemies
+  - InteractableObject # 12 - Physics layer for interactable items (levers, doors)
+  - Collectible # 13 - Physics layer for pickups lying on ground
+  - Trigger # 14 - Volumes used *only* for trigger events (no physics collision response)
+  - WorldGeometry # 15 - Detailed static world meshes, potentially different culling/collision than simple Obstacles
+  - CharacterController # 16 - If using CharacterController component, sometimes useful to have its own layer
+  - Vehicle # 17 - Player or AI controlled vehicles
+  - Debris # 18 - Small physics objects resulting from destruction
+  - Cover # 19 - Specific layer for AI cover points/objects
+  - Sensor # 20 - AI sensor colliders (vision cones, hearing range) - often triggers
+  - Minimap # 21 - Objects only rendered by the minimap camera
+  - EffectsCamera # 22 - Objects only rendered by a secondary effects camera (e.g., weapon scope view)
+  - Skybox # 23 - Layer for skybox elements if needing specific culling
+  - Volume # 24 - Post Processing Volumes, Light Probe Groups, etc. Often Ignore Raycast, but layer gives option.
+  - PlayerOnly # 25 - Things only the player should collide with (e.g., special triggers)
+  - EnemyOnly # 26 - Things only enemies should collide with
+  - VisualOnly # 27 - Objects with colliders just for visuals, no gameplay collision (e.g. distant trees)
+  - DynamicObject # 28 - Movable physics objects like crates, barrels
+  - NoLight # 29 - Objects that should not receive lighting (use with Culling Mask)
+  - NoShadow # 30 - Objects that should not cast shadows (use with Culling Mask)
+  - Debug # 31 - For debug visualizations, often culled from final builds/main camera
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
+  # Default must exist
+  - name: Default # Typically for general gameplay elements if not further specified
+    uniqueID: 0 # MUST BE 0
     locked: 0
-  m_RenderingLayers:
-  - Default
+  # Background Layers
+  - name: BackgroundFar
+    uniqueID: 3178307346 # Example ID, Unity generates these. Incrementing is fine too (1, 2, 3...)
+    locked: 0
+  - name: BackgroundMid
+    uniqueID: 1796168325
+    locked: 0
+  - name: BackgroundClose
+    uniqueID: 2585883903
+    locked: 0
+  # Environment Layers (Behind Gameplay)
+  - name: EnvironmentBack
+    uniqueID: 3127860487
+    locked: 0
+  # Gameplay Area Layers
+  - name: Ground # Sprites drawn flat on the ground (decals, shadows)
+    uniqueID: 1377146599
+    locked: 0
+  - name: ObstaclesBehind # e.g. short walls characters walk behind
+    uniqueID: 4209897893
+    locked: 0
+  # --- Main Gameplay happens around 'Default' or dedicated layers ---
+  - name: Characters # Could replace 'Default' for Player/Enemy sprites
+    uniqueID: 1 # Example of simple incrementing ID
+    locked: 0
+  - name: Pickups # Items lying on ground, potentially slightly above 'Ground'
+    uniqueID: 2
+    locked: 0
+  - name: ObstaclesInFront # e.g. railings, short objects characters walk in front of
+    uniqueID: 3
+    locked: 0
+  # Environment Layers (In Front of Gameplay)
+  - name: EnvironmentFront # Pillars, foreground elements
+    uniqueID: 4
+    locked: 0
+  - name: EnvironmentOverlay # e.g. weather effects like rain close to camera
+    uniqueID: 5
+    locked: 0
+  # Effects Layer
+  - name: EffectsBelow # Ground effects under characters
+    uniqueID: 6
+    locked: 0
+  - name: EffectsMain # Explosions, impacts, etc. Often needs to be above characters.
+    uniqueID: 7
+    locked: 0
+  - name: Projectiles # Ensure projectiles render above/below correctly
+    uniqueID: 8
+    locked: 0
+  - name: EffectsAbove # Effects explicitly over everything (e.g., screen-space effects managed by sorting layer)
+    uniqueID: 9
+    locked: 0
+  # UI Layers (World Space)
+  - name: WorldSpaceUI_Back # Health bars, names under characters
+    uniqueID: 10
+    locked: 0
+  - name: WorldSpaceUI_Front # Interaction prompts, icons above characters
+    uniqueID: 11
+    locked: 0
+  # UI Layers (Screen Space)
+  - name: UI_Background # Full screen panel backgrounds
+    uniqueID: 12
+    locked: 0
+  - name: UI_Base # Buttons, main HUD elements
+    uniqueID: 13
+    locked: 0
+  - name: UI_Mid # Windows, inventory screens
+    uniqueID: 14
+    locked: 0
+  - name: UI_Foreground # Popups, modal dialogs
+    uniqueID: 15
+    locked: 0
+  - name: UI_Tooltips # Tooltips above all other UI
+    uniqueID: 16
+    locked: 0
+  - name: UI_Notifications # Temporary messages/alerts
+    uniqueID: 17
+    locked: 0
+  # Topmost Layer
+  - name: Debug # Debug text/visualizations on top of everything
+    uniqueID: 18
+    locked: 0
+  # Add more as needed...
+  m_RenderingLayers: # Primarily for URP/HDRP Decals and specific rendering features
+  - name: Default # Built-in
+    value: 1 # Bitmask value (Layer 0)
+  - name: Player
+    value: 2 # Bitmask value (Layer 1)
+  - name: Enemy
+    value: 4 # Bitmask value (Layer 2)
+  - name: EnvironmentStatic
+    value: 8 # Bitmask value (Layer 3)
+  - name: EnvironmentDynamic
+    value: 16 # Bitmask value (Layer 4)
+  - name: Effects
+    value: 32 # Bitmask value (Layer 5)
+  - name: UI # Might be useful for UI decals?
+    value: 64 # Bitmask value (Layer 6)
+  # Add specific decal layers if needed, e.g.
+  # - name: Decal_BulletHoles
+  #   value: 128 # Bitmask value (Layer 7)
+  # - name: Decal_Blood
+  #   value: 256 # Bitmask value (Layer 8)
+  # Layer values are bitmasks (1, 2, 4, 8, 16, 32...)
