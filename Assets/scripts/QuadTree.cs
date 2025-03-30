@@ -54,7 +54,26 @@ public static class QuadTree
                 output = child.gameObject;
             }
         }
-        return;
+    }
+    public static GameObject[] GetInRadus(Transform find, float radius)
+    {
+        List<GameObject> output = new List<GameObject>();
+        GetInRadus(root, find, output, radius);
+        return output.ToArray();
+    }
+    private static void GetInRadus(Transform current, Transform find, List<GameObject> output, float radius)
+    {
+        if (!Intersects(current, find, radius))
+            return;
+        if (current.childCount == 4)
+        {
+            foreach (Transform child in current)
+                GetInRadus(child, find, output, radius);
+            return;
+        }
+        foreach (Transform child in current)
+            if (Vector2.Distance(child.position, find.position) <= radius)
+                output.Add(child.gameObject);
     }
     public static bool PointInRadius(Transform check, float radius)
     {
