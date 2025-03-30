@@ -9,8 +9,7 @@ public static class QuadTree
     {
         Transform treeLocation = GetLocation(zombie);
         zombie.SetParent(treeLocation);
-
-            Split(treeLocation);
+        Split(treeLocation);
     }
     public static void Move(Transform zombie)
     {
@@ -134,7 +133,6 @@ public static class QuadTree
                 grandchilden.Add(grandchild);
             childeren.Add(child);
         }
-        Debug.Assert(toMerge.childCount == 4);
         foreach (Transform grandchild in grandchilden)
             grandchild.SetParent(toMerge);
         foreach (Transform child in childeren)
